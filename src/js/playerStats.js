@@ -1,27 +1,32 @@
 const components = {
-  initPlayerStats: initPlayerStats,
   playerStats: {
-    data: {},
-    getNewPlayer: getNewPlayer,
+    initPlayerStats,
+    getNewPlayer,
     checkPosition
   }
 };
 
-function getNewPlayer(playerId) {
-  this.findStatHolders = this.componentDiv.querySelectorAll('section.playerStat');
+function getNewPlayer(playerId, componentId) {
+  const component = this[componentId];
+  const componentDiv = component.componentDiv;
+  const player = component.data[playerId];
 
-  this.selectedAttributes = ['appearances', 'goals', 'goal_assist', 'goalsPerMatch', 'passesPerMinute'];
+  // get dom elems and set requested attrs
+  component.findStatHolders = componentDiv.querySelectorAll('section.playerStat');
+  component.selectedAttr = ['appearances', 'goals', 'goal_assist', 'goalsPerMatch', 'passesPerMinute'];
 
-  this.findStatHolders.forEach((item, i)=> {
-    item.querySelectorAll('.statValue')[0].innerHTML = this.data[playerId][this.selectedAttributes[i]] || 0;
+  // populate attrs
+  component.findStatHolders.forEach((item, i)=> {
+    item.querySelectorAll('.statValue')[0].innerHTML = player[component.selectedAttr[i]] || 0;
   });
 
-  this.componentDiv.querySelectorAll('h1')[0].innerHTML = this.data[playerId].name;
-  this.componentDiv.querySelectorAll('h2')[0].innerHTML = this.data[playerId].position;
-  this.componentDiv.querySelectorAll('img')[0].src = this.data[playerId].playerImage;
-  this.componentDiv.querySelectorAll('img')[0].alt = this.data[playerId].name;
-  this.componentDiv.querySelectorAll('img')[1].src = this.data[playerId].teamImage;
-  this.componentDiv.querySelectorAll('img')[1].alt = this.data[playerId].teamName;
+  // populate other dom elems as required
+  componentDiv.querySelectorAll('h1')[0].innerHTML = player.name;
+  componentDiv.querySelectorAll('h2')[0].innerHTML = player.position;
+  componentDiv.querySelectorAll('img')[0].src = player.playerImage;
+  componentDiv.querySelectorAll('img')[0].alt = player.name;
+  componentDiv.querySelectorAll('img')[1].src = player.teamImage;
+  componentDiv.querySelectorAll('img')[1].alt = player.teamName;
 }
 
 function checkPosition(pos) {
@@ -36,46 +41,56 @@ function checkPosition(pos) {
 }
 
 function initPlayerStats(playerId, componentId) {
-
-  this.playerStats.componentDiv = document.getElementById(componentId);
+  this[componentId] = {
+    componentDiv: document.getElementById(componentId)
+  };
+  const instance = this[componentId];
+  const componentDiv = instance.componentDiv;
 
   $.getJSON('/data/player-stats.json')
     .done((data) => {
-      // this.playerStats.data = data;
+      // Define some defaults
       var selectOptions = '';
       let firstPlayerId = 0;
-      this.playerStats.data = {};
-      data.players.forEach((item) => {
+      instance.data = {};
 
+      // Log relevant info for each player
+      data.players.forEach((item) => {
+        // Set first loaded player id
         if(firstPlayerId === 0) firstPlayerId = item.player.id;
 
-        this.playerStats.data[item.player.id] = {
+        // Get attributes
+        instance.data[item.player.id] = {
           name: item.player.name.first + ' ' + item.player.name.last,
-          position: this.playerStats.checkPosition(item.player.info.position),
+          position: this.checkPosition(item.player.info.position),
           playerImage: '/images/players/p' + item.player.id + '.png',
           teamImage: '/images/teams/t' + item.player.currentTeam.id + '.png',
           teamName: item.player.currentTeam.name
         };
 
+        // define object as player for easy reading
+        const player = instance.data[item.player.id];
+
+        // get player stats and reformat (to avoid missing and misaligned array values)
         item.stats.forEach((stat) => {
-          this.playerStats.data[item.player.id][(stat.name).toLowerCase()] = stat.value;
+          player[(stat.name).toLowerCase()] = stat.value;
         });
+        player.goalsPerMatch = parseInt(player.goals/player.appearances*100)/100;
+        player.passesPerMinute = parseInt((player.fwd_pass + player.backward_pass)/player.mins_played*100)/100;
 
-        this.playerStats.data[item.player.id].goalsPerMatch = parseInt(this.playerStats.data[item.player.id].goals/this.playerStats.data[item.player.id].appearances*100)/100;
-        this.playerStats.data[item.player.id].passesPerMinute = parseInt((this.playerStats.data[item.player.id].fwd_pass + this.playerStats.data[item.player.id].backward_pass)/this.playerStats.data[item.player.id].mins_played*100)/100;
-
+        // write select options for dropdown
         selectOptions += `<option value="${item.player.id}">${item.player.name.first} ${item.player.name.last}</option>`;
       });
 
-      if (this.playerStats.currentPlayer === undefined){
-        const selectList = document.getElementById(componentId).querySelectorAll('select.playerSelector')[0];
-        selectList.addEventListener('change', (e) => {
-          this.playerStats.getNewPlayer(e.target.value, componentId);
-        });
-        this.playerStats.getNewPlayer(firstPlayerId, componentId);
+      // Set up select list and event listener
+      const selectList = componentDiv.querySelectorAll('select.playerSelector')[0];
+      selectList.addEventListener('change', (e) => {
+        this.getNewPlayer(e.target.value, componentId);
+      });
+      selectList.innerHTML = selectOptions;
 
-        selectList.innerHTML = selectOptions;
-      }
+      // Populate first loaded player
+      this.getNewPlayer(firstPlayerId, componentId);
     })
     .fail((jqxhr, textStatus, error) => {
       var err = textStatus + ',' + error;
@@ -84,5 +99,5 @@ function initPlayerStats(playerId, componentId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  components.initPlayerStats(4916, 'stats1');
+  components.playerStats.initPlayerStats(4916, 'stats1');
 });
