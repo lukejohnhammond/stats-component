@@ -17,7 +17,7 @@ const livereload = require('gulp-livereload');
 
 // clean
 gulp.task('clean', () => {
-  del(['public/**/*']);
+  del(['public/***/**/*']);
 });
 
 // bower
@@ -51,7 +51,7 @@ gulp.task('scripts', () => {
       'app.js',
       '**/*.js'
     ]))
-    .pipe(concat('app.js'))
+    .pipe(concat('playerStats.js'))
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('public/js'))
@@ -61,7 +61,7 @@ gulp.task('scripts', () => {
 
 // styles
 gulp.task('styles', () => {
-  return gulp.src('src/scss/app.scss')
+  return gulp.src('src/scss/main.scss')
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
 		.pipe(cleanCSS({ compatibility: 'ie8'}))
@@ -74,7 +74,7 @@ gulp.task('styles', () => {
 
 // images
 gulp.task('images', () => {
-  return gulp.src(['src/images/*.jpg', 'src/images/*.png', 'src/images/*.gif', 'src/images/*.svg'])
+  return gulp.src(['src/images/**/*.jpg', 'src/images/**/*.png', 'src/images/**/*.gif', 'src/images/**/*.svg'])
     .pipe(gulp.dest('public/images'));
 });
 
@@ -90,8 +90,6 @@ gulp.task('html', () => {
     .pipe(gulp.dest('public'))
     .pipe(livereload());
 });
-
-
 
 // nodemon
 gulp.task('nodemon', () => {

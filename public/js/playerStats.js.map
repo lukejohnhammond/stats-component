@@ -1,0 +1,1 @@
+{"version":3,"sources":["playerStats.js"],"names":["console","log","$","getJSON","data","players"],"mappings":"YAAAA,SAAQC,IAAI,SAGZC,EAAEC,QAAQ,0BAA2B,SAACC,GACpCJ,QAAQC,IAAIG,EAAKC,QAAQ","file":"playerStats.js","sourcesContent":["console.log('Works');\n\n\n$.getJSON('/data/player-stats.json', (data) => {\n  console.log(data.players[0]);\n});\n"]}
