@@ -1,0 +1,20 @@
+{
+  "name": "stats-component",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Luke Hammond <luke.john.hammond@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/lukejohnhammond/stats-component",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jQuery": "^3.1.1"
+  }
+}
