@@ -15,6 +15,10 @@ body {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     font-size: 16px;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
     line-height: 22px;
   }
   height: 100%;
@@ -61,7 +65,7 @@ body {
           justify-content: center;
         overflow: hidden;
         position: absolute;
-          bottom: -51px;
+          bottom: -47px;
           right: 14px;
 
         background-color: #FFFFFF;
