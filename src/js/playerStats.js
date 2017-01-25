@@ -16,9 +16,11 @@ function getNewPlayer(playerId, componentId) {
   component.selectedAttr = ['appearances', 'goals', 'goal_assist', 'goalsPerMatch', 'passesPerMinute'];
 
   // populate attrs
-  component.findStatHolders.forEach((item, i)=> {
+  console.log(component.findStatHolders);
+  for (let i = 0; i < component.findStatHolders.length; i++) {
+    const item = component.findStatHolders[i];
     item.querySelectorAll('.statValue')[0].innerHTML = player[component.selectedAttr[i]] || 0;
-  });
+  }
 
   // populate other dom elems as required
   componentDiv.querySelectorAll('h1')[0].innerHTML = player.name;
@@ -32,9 +34,9 @@ function getNewPlayer(playerId, componentId) {
 function checkPosition(pos) {
   switch (pos) {
     case 'D':
-      return 'Defence';
+      return 'Defender';
     case 'M':
-      return 'Midfield';
+      return 'Midfielder';
     case 'F':
       return 'Forward';
   }
@@ -55,7 +57,8 @@ function initPlayerStats(playerId, componentId) {
       instance.data = {};
 
       // Log relevant info for each player
-      data.players.forEach((item) => {
+      for (let i = 0;  i < data.players.length; i++) {
+        const item = data.players[i];
         // Set first loaded player id
         if(firstPlayerId === 0) firstPlayerId = item.player.id;
 
@@ -72,22 +75,24 @@ function initPlayerStats(playerId, componentId) {
         const player = instance.data[item.player.id];
 
         // get player stats and reformat (to avoid missing and misaligned array values)
-        item.stats.forEach((stat) => {
+        for (let i = 0;  i < item.stats.length; i++){
+          const stat = item.stats[i];
           player[(stat.name).toLowerCase()] = stat.value;
-        });
+        }
+
         player.goalsPerMatch = parseInt(player.goals/player.appearances*100)/100;
         player.passesPerMinute = parseInt((player.fwd_pass + player.backward_pass)/player.mins_played*100)/100;
 
         // write select options for dropdown
         selectOptions += `<option value="${item.player.id}">${item.player.name.first} ${item.player.name.last}</option>`;
-      });
+      }
 
       // Set up select list and event listener
       const selectList = componentDiv.querySelectorAll('select.playerSelector')[0];
       selectList.addEventListener('change', (e) => {
-        this.getNewPlayer(e.target.value, componentId);
+        if (parseInt(e.target.value) !== 0) this.getNewPlayer(e.target.value, componentId);
       });
-      selectList.innerHTML = selectOptions;
+      selectList.innerHTML = '<option value="0">Select a player...</option>' + selectOptions;
 
       // Populate first loaded player
       this.getNewPlayer(firstPlayerId, componentId);

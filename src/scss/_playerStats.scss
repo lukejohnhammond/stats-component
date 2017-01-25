@@ -1,0 +1,148 @@
+$statsRed: rgba(233,0,82,1);
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.statsComponent {
+  background-color: grey; // Temp
+
+  , * {
+    margin: 0px;
+    padding: 0px;
+
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+    align-items: center;
+    justify-content: center;
+  position: absolute;
+
+  .card {
+    width: 300px;
+
+    background-color: $statsRed;
+  }
+
+  .playerProfile {
+    height: 295px;
+    width: 100%;
+    padding: 14px 16px;
+
+    position: relative;
+
+    background-color: #FFFFFF;
+    background-image: url('/images/layout/playerStats/bg_whitePattern.gif');
+      background-position: bottom left;
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      & > img {
+        width: 160px;
+
+        position: absolute;
+          bottom: 0px;
+          left: 14px;
+      }
+
+      .playerTeamLogo {
+        height: 82px;
+        width: 82px;
+
+        display: flex;
+          align-items: center;
+          justify-content: center;
+        overflow: hidden;
+        position: absolute;
+          bottom: -51px;
+          right: 14px;
+
+        background-color: #FFFFFF;
+        border-radius: 41px;
+
+        > img {
+          height: 75%;
+          width: 75%;
+        }
+
+      }
+  }
+
+  .playerSelector {
+    height: 40px;
+    width: 100%;
+
+    padding: 0px 10px;
+    margin: 0 0 14px 0;
+
+    background-color: rgba(234,234,234,1);
+    background-image: url('/images/layout/playerStats/bg_dropdownArrow.gif');
+      background-repeat: no-repeat;
+      background-position: top right;
+    border: none;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      // -webkit-border-radius: 0px;
+      &::-ms-expand {
+        display:none;
+      }
+      option {
+        padding:5px 10px;
+        border: 0px;
+        -moz-appearance: none;
+        appearance: none;
+      }
+  }
+
+  .playerContent {
+    padding: 16px 16px 14px 16px;
+
+    * {
+      color: #FFFFFF;
+    }
+
+    h1 {
+      margin: 0 0 2px 0;
+      font-weight: normal;
+      font-size: 22px;
+      line-height: 30px;
+    }
+
+    h2 {
+      margin: 0 0 16px 0;
+      font-weight: normal;
+    }
+  }
+
+  .playerStat {
+    height: 40px;
+    margin: 0 0 2px 0;
+    padding: 12px;
+
+    background-color: rgb(234, 234, 234);
+    box-shadow: 0 0 5px 3px rgba(0,0,0,0.1);
+
+    * {
+      color: rgba(56, 0, 60, 1);
+      line-height: 16px;
+    }
+
+    .statKey {
+      float: left;
+    }
+    .statValue {
+      float: right;
+      font-weight: bold;
+    }
+  }
+}
