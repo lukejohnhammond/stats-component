@@ -16,7 +16,6 @@ function getNewPlayer(playerId, componentId) {
   component.selectedAttr = ['appearances', 'goals', 'goal_assist', 'goalsPerMatch', 'passesPerMinute'];
 
   // populate attrs
-  console.log(component.findStatHolders);
   for (let i = 0; i < component.findStatHolders.length; i++) {
     const item = component.findStatHolders[i];
     item.querySelectorAll('.statValue')[0].innerHTML = player[component.selectedAttr[i]] || 0;
