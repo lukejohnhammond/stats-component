@@ -1,6 +1,6 @@
 # stats-component
 
-##Basic expample of football profile and stats component
+##Basic football profile and stats component
 
 - Node.js/NPM build
   - Gulp to compile from /src to /public files and run local via nodemon
